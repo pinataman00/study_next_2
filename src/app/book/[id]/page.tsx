@@ -5,13 +5,13 @@ import { BookData } from "@/types";
 export default async function Page({
   params,
 }: {
-  params: Promise<{ id: string | string[] }>; // URL Parameter > 자동 전달되는 props 중 하나임...
+  params: Promise<{ id?: string | string[] }>; // URL Parameter > 자동 전달되는 props 중 하나임...
 }) {
-  // const { id } = await params;
+  const { id } = await params;
 
   const response = await fetch(
-    // `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${id}`
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${params.id}`
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${id}`
+    // `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${params.id}`
   );
   if (!response.ok) {
     return <div>오류가 발생했습니다...</div>;
