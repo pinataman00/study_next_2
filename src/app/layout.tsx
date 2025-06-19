@@ -5,7 +5,9 @@ import { BookData } from "@/types";
 
 async function Footer() {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`
+    // ✅ data-fetching > 강제 cache 설정! (미설정 시, no-cache됨 -> DynamicPage가 됨...)
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`,
+    { cache: "force-cache" }
   );
   if (!response.ok) {
     return <footer>제작 @winterlood</footer>;
@@ -20,7 +22,7 @@ async function Footer() {
     </footer>
   );
 }
-
+//✅ Dynamic -> Static Page로 변경하기
 export default function RootLayout({
   children,
 }: Readonly<{

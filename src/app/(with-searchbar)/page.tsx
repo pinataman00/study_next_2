@@ -16,7 +16,8 @@ async function AllBooks() {
     //✅ 환경변수(.env) 사용하기
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`,
     // ✅ fetch() > cache
-    { cache: "no-store" }
+    // { cache: "no-store" } //->  ✅DynamicPage가 되는 이유임...
+    { cache: "force-cache" } //->  ✅StaticPage로 변경하기 위해 cache설정을 변경함
   ); // data-fetching로직을 Component안에 작성할 수 있게 됨
   if (!response.ok) {
     //✅ 예외처리
@@ -38,7 +39,7 @@ async function RecoBooks() {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`, //✅ auto no cache...
     // { cache: "force-cache" } // ✅ 언제나 cache된 data...
-    { next: { revalidate: 3 } } // ✅ 3초마다 data 갱신하기...
+    { next: { revalidate: 3 } } // ✅ 3초마다 data 갱신하기... > Full Route Cache 조건 만족
   );
   if (!response.ok) {
     return <div>오류가 발생했습니다...</div>;
@@ -54,6 +55,7 @@ async function RecoBooks() {
   );
 }
 
+//✅ index page - Static Page로 변경하기...
 export default function Home() {
   return (
     <div className={style.container}>
