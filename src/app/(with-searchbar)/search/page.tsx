@@ -2,6 +2,9 @@
 import BookItem from "@/components/book-item";
 import { BookData } from "@/types";
 
+// export const dynamic = "error"; //✅ RouteSegmenetOption
+//->  ⚠️ QueryString에 의존하는 페이지인데? -> "검색" 기능은 당연히 제대로 실행되지 않음 (searchParams는 undefined, 빈 값이 됨)
+
 // import { useSearchParams } from "next/navigation"; // ⚠️ (ReactHook)useSearchParams는 사용하지 않음! 왜냐면 ServerComponent니까!
 
 // ✅ Dynamic -> Static Page 변경하기? > 불가! > QueryString 같은 동적 값에 의존함. FullRouteCache 포기!

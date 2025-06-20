@@ -3,6 +3,24 @@ import style from "./page.module.css";
 import books from "@/mock/books.json"; // ✅ 임시 데이터로서 rendering  중임...
 import { BookData } from "@/types";
 
+//✅ Route Segment Option
+// export const dynamic = ''; //특정 Page의 유형을 "강제로" Static, Dynamic Page로 설정함
+/**
+ *  유형
+ *  1. auto
+ *      - 아무것도 강제하지 않음 (동적함수/data-fetching 시 설정된 cache 옵션에 따라 자동으로 설정됨...)
+ *      - (default) 기본 값이므로 생략해도 됨
+ *  2. force-dynamic
+ *      - Page를 강제로 DynamicPage라고 설정함
+ *  3. force-static
+ *      - Page를 강제로 StaticPage라고 설정함
+ *  4. error
+ *      - Page를 강제로 StaticPage로 설정함
+ *      - 단, 동적함수||caching 되지 않는 data-fetching 등... Static으로 설정하면 안 되는 이유가 있을 경우, build error를 발생시킴
+ *
+ */
+// export const dynamic = "force-dynamic";
+
 //✅ DATA-FETCHING > API 호출하기
 /** - 대상 API가 2개 이상일 경우 > Component를 분리함 > 가독성 제고
  * 1. 모든 도서
