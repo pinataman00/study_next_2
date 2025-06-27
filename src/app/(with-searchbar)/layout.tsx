@@ -9,6 +9,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       -> Server단에서의 사전 rendering 과정에서 해당 Component는 완전히 배제되며, 오직 Client단에서만 rendering되는 Component로 설정됨
       */}
       {/* <div>Loading...</div> 대체 UI 설정 */}
+      {/* <div>{new Date().toLocaleString()}</div> */}
       <Suspense fallback={<div>Loading...</div>}>
         <Searchbar />
       </Suspense>

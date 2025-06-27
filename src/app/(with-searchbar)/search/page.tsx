@@ -1,22 +1,16 @@
 // import books from "@/mock/books.json";
 import BookItem from "@/components/book-item";
+import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import { BookData } from "@/types";
+import { delay } from "@/util/delay";
+import { Suspense } from "react";
 
-// export const dynamic = "error"; //✅ RouteSegmenetOption
-//->  ⚠️ QueryString에 의존하는 페이지인데? -> "검색" 기능은 당연히 제대로 실행되지 않음 (searchParams는 undefined, 빈 값이 됨)
+async function SearchResult({ q }: { q: string }) {
+  // ✅ Streaming > Suspense Component
 
-// import { useSearchParams } from "next/navigation"; // ⚠️ (ReactHook)useSearchParams는 사용하지 않음! 왜냐면 ServerComponent니까!
-
-// ✅ Dynamic -> Static Page 변경하기? > 불가! > QueryString 같은 동적 값에 의존함. FullRouteCache 포기!
-//-> 페이지 생성 최적화 방법 > data cache 옵션 설정하기 > force-cache
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string }>;
-}) {
-  const { q } = await searchParams; // ✅현재 페이지에 전달된 QueryString
-
+  await delay(1500);
   const response = await fetch(
+    //✅ (Streaming) 비동기 함수 > 소요 시간 만큼, 전체 Page의 rendering시간이 지연될 수 있음...
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/search?q=${q}`,
     { cache: "force-cache" }
   );
@@ -33,5 +27,23 @@ export default async function Page({
         <BookItem key={book.id} {...book} />
       ))}
     </div>
+  );
+}
+
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { q?: string };
+}) {
+  return (
+    //  ✅ Streaming > Suspense - 내부의 Component가 비동기 작업이 완료되기 전까지, "미완성 상태"로 남겨둠
+    //fallback= 대체UI를 대입하면 됨
+    //key = 값이 변할 때마다 loading상태로 돌아감 > (React) key값이 바뀜 = Component가 완전히 달라짐||다른 Component가 생겼음, 으로 인식함
+    <Suspense
+      key={searchParams.q || ""}
+      fallback={<BookListSkeleton count={3} />}
+    >
+      <SearchResult q={searchParams.q || ""} />
+    </Suspense>
   );
 }

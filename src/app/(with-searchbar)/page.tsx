@@ -2,6 +2,10 @@ import BookItem from "@/components/book-item";
 import style from "./page.module.css";
 import books from "@/mock/books.json"; // ✅ 임시 데이터로서 rendering  중임...
 import { BookData } from "@/types";
+import { delay } from "@/util/delay";
+import { Suspense } from "react";
+import BookItemSkeleton from "@/components/skeleton/book-item-skeleton";
+import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 
 //✅ Route Segment Option
 // export const dynamic = ''; //특정 Page의 유형을 "강제로" Static, Dynamic Page로 설정함
@@ -29,6 +33,8 @@ import { BookData } from "@/types";
 
 // ✅비동기 > async
 async function AllBooks() {
+  await delay(1500); //✅ Suspense 적용 > fetching 시간을 일부러 지연시키기
+
   // const response = await fetch(`http://localhost:12345/book`); // data-fetching로직을 Component안에 작성할 수 있게 됨
   const response = await fetch(
     //✅ 환경변수(.env) 사용하기
@@ -53,6 +59,7 @@ async function AllBooks() {
 }
 
 async function RecoBooks() {
+  await delay(3000); //✅ Suspense 적용 > fetching 시간을 일부러 지연시키기
   // const response = await fetch(`http://localhost:12345/book/random`);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`, //✅ auto no cache...
@@ -73,23 +80,24 @@ async function RecoBooks() {
   );
 }
 
+export const dynamic = "force-dynamic"; //static -> dynamic 변경
+
 //✅ index page - Static Page로 변경하기...
 export default function Home() {
   return (
     <div className={style.container}>
       <section>
         <h3>지금 추천하는 도서</h3>
-        {/* {books.map((book) => (
-          <BookItem key={book.id} {...book} />
-        ))} */}
-        <RecoBooks />
+        {/* <Suspense fallback={<div>도서를 불러오는 중입니다...</div>}> */}
+        <Suspense fallback={<BookListSkeleton count={3} />}>
+          <RecoBooks />
+        </Suspense>
       </section>
       <section>
         <h3>등록된 모든 도서</h3>
-        {/* {allBooks.map((book: BookData) => (
-          <BookItem key={book.id} {...book} />
-        ))} */}
-        <AllBooks />
+        <Suspense fallback={<BookListSkeleton count={10} />}>
+          <AllBooks />
+        </Suspense>
       </section>
     </div>
   );

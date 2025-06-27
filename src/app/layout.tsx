@@ -37,7 +37,8 @@ export default function RootLayout({
           </header>
           <main>{children}</main>
           {/* <footer>제작 @winterlood</footer> */}
-          <Footer />
+          {/* TODO 250627) Footer 임시 주석 처리... */}
+          {/* <Footer /> */}
         </div>
       </body>
     </html>
