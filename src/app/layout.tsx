@@ -17,7 +17,7 @@ async function Footer() {
 
   return (
     <footer>
-      <div>제작 @winterlood</div>
+      <div>제작 @GGMA</div>
       <div>{bookCount}개의 도서가 등록돼 있습니다</div>
     </footer>
   );
@@ -36,9 +36,7 @@ export default function RootLayout({
             <Link href={"/"}>📚 ONEBITE BOOKS</Link>
           </header>
           <main>{children}</main>
-          {/* <footer>제작 @winterlood</footer> */}
-          {/* TODO 250627) Footer 임시 주석 처리... */}
-          {/* <Footer /> */}
+          <Footer />
         </div>
       </body>
     </html>

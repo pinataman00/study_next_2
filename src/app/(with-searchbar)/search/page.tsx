@@ -30,20 +30,25 @@ async function SearchResult({ q }: { q: string }) {
   );
 }
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
-  searchParams: { q?: string };
+  // searchParams: { q?: string };
+  searchParams: Promise<{ q?: string }>;
 }) {
+  const { q } = await searchParams;
+
   return (
     //  ✅ Streaming > Suspense - 내부의 Component가 비동기 작업이 완료되기 전까지, "미완성 상태"로 남겨둠
     //fallback= 대체UI를 대입하면 됨
     //key = 값이 변할 때마다 loading상태로 돌아감 > (React) key값이 바뀜 = Component가 완전히 달라짐||다른 Component가 생겼음, 으로 인식함
     <Suspense
-      key={searchParams.q || ""}
+      // key={searchParams.q || ""}
+      key={q || ""}
       fallback={<BookListSkeleton count={3} />}
     >
-      <SearchResult q={searchParams.q || ""} />
+      {/* <SearchResult q={searchParams.q || ""} /> */}
+      <SearchResult q={q || ""} />
     </Suspense>
   );
 }
