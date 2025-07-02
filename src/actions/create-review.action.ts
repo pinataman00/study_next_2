@@ -1,5 +1,6 @@
 "use server";
-import { revalidatePath } from "next/cache";
+import Layout from "@/app/(with-searchbar)/layout";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 //✅ ⭐ Server Action 설정 -> 다음 코드를 실행하는 API가 자동 생성됨
 //별도의 action.ts로 관리할 경우, 파일 최상단에 "use server"를 작성함
@@ -41,7 +42,17 @@ export async function createReviewAction(formData: FormData) {
 		 * 상기, full-route-cache는 사실상 무효화/삭제된 cache임
 		 * 
 		 */
-		revalidatePath(`/book/${bookId}`); //⭐ 경로에 해당하는 Page를 재검증함 = Page를 다시 생성함
+		// ⭐ 페이지 재검증
+		//1. 특정 주소에 해당하는 페이지만 재검증함
+		// revalidatePath(`/book/${bookId}`); //경로에 해당하는 Page를 재검증함 = Page를 다시 생성함
+		// //2. 특정 경로의 모든 동적 페이지를 재검증함 (= 모든 도서의 상세 Page를 재검증함)
+		// revalidatePath('/book/[id]', "page");
+		// //3. 특정 layout을 갖는 모든 페이지를 재검증함
+		// revalidatePath('/(with-searchbar)', 'layout');
+		// //4. 모든 데이터를 재검증함
+		// revalidatePath('/', 'layout'); //'3'의 논리와 같음
+		//5. 태그 기준, 데이터 캐시 재검증하기 > 가장 경제적인 방법임. '방식 1'의 경우 모든 캐시(도서 상세정보 조회 데이터-BookDetail-등)를 삭제하니까...
+		revalidateTag(`review-${bookId}`); //data tag? = fetch() 시 사용한 data cache 옵션 (※ ReviewList 컴포넌트 참고)
 	} catch (err) {
 		console.error(err);
 		return;
