@@ -2,6 +2,7 @@ import "./globals.css";
 import Link from "next/link";
 import style from "./layout.module.css";
 import { BookData } from "@/types";
+import { ReactNode } from "react";
 
 async function Footer() {
   const response = await fetch(
@@ -25,8 +26,10 @@ async function Footer() {
 //✅ Dynamic -> Static Page로 변경하기
 export default function RootLayout({
   children,
+  modal, // ✅ paralllel route
 }: Readonly<{
   children: React.ReactNode;
+  modal: ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -38,6 +41,10 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </div>
+        {/* ✅ parallel route */}
+        {modal}
+        {/*  ✅ intercept route 관련 modal 구현 */}
+        <div id="modal-root"></div>
       </body>
     </html>
   );
