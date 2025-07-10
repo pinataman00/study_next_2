@@ -35,14 +35,17 @@ export default function Modal({ children }: { children: ReactNode }) {
     <dialog
       onClose={() => router.back()}
       onClick={(e) => {
-        //모달의 배경이 클릭된 경우, "뒤로 가기"
+        //모달의 배경이 클릭된 경우, "뒤로 가기 (인덱스 페이지에 해당됨)"
         if ((e.target as any).nodeName === "DIALOG") {
+          // ✅ DIALOG : 사용자가 실제로 클릭한 "DOM요소"를 의미함 (여기서는 <dialog/> 태그)
+          // <dialog> : Modal 전체를 감싸는 껍데기, 배경
           router.back();
         }
       }}
       className={style.modal}
       ref={dialogRef}
     >
+      {/* 실질적인 Modal Contnent 내부임 (Modal 내부 UI) */}
       {children}
     </dialog>,
     document.getElementById("modal-root") as HTMLElement

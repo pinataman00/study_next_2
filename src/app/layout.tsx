@@ -41,9 +41,9 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </div>
-        {/* ✅ parallel route */}
+        {/* ✅ parallel route - Modal 배경으로 인덱스 페이지를 '병렬적으로' 띄우기 위함*/}
         {modal}
-        {/*  ✅ intercept route 관련 modal 구현 */}
+        {/*  ✅ intercept route 관련 modal 구현 (src/components/Modal.tsx 참고) */}
         <div id="modal-root"></div>
       </body>
     </html>
