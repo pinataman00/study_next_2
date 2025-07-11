@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
     fetches: {
       fullUrl: true, //✅ (Terminal) data-fetching 관련 log 출력...
     }
+  },
+  images: {
+    domains: ["shopping-phinf.pstatic.net"],
   }
 };
 

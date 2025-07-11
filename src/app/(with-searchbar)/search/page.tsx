@@ -3,6 +3,7 @@ import BookItem from "@/components/book-item";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import { BookData } from "@/types";
 import { delay } from "@/util/delay";
+import { Metadata } from "next";
 import { Suspense } from "react";
 
 async function SearchResult({ q }: { q: string }) {
@@ -28,6 +29,34 @@ async function SearchResult({ q }: { q: string }) {
       ))}
     </div>
   );
+}
+
+// ✅ meta data 설정하기 > "동적 값"을 metadata에 적용하는 법? (아래 PageComponent의 데이터를 가져올 수 없음)
+// export const metadata: Metadata = {
+//   title: "검색어 - ",
+//   description: "",
+//   openGraph : {
+
+//   }
+// }
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}): Promise<Metadata> {
+  //(TypeScript)함수의 반환 값 설정 - 본 함수는 비동기적으로 Metadata란 객체를 반환한다는 의미임
+  // ✅ 현재 Page의 metadata를 동적으로 생성함 - PageComponent가 전달받는 매개변수(props)를 전달받을 수 있음!
+
+  const { q } = await searchParams;
+  return {
+    title: `${q} : 한입북스 검색`,
+    description: `${q}의 검색결과 입니다`,
+    openGraph: {
+      title: `${q} : 한입북스 검색`,
+      description: `${q}의 검색결과 입니다`,
+      images: ["/thumbnail.png"],
+    },
+  };
 }
 
 export default async function Page({
