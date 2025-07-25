@@ -2,14 +2,14 @@
 import BookItem from "@/components/book-item";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import { BookData } from "@/types";
-import { delay } from "@/util/delay";
+// import { delay } from "@/util/delay";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
 async function SearchResult({ q }: { q: string }) {
   // ✅ Streaming > Suspense Component
 
-  await delay(1500);
+  // await delay(1500);
   const response = await fetch(
     //✅ (Streaming) 비동기 함수 > 소요 시간 만큼, 전체 Page의 rendering시간이 지연될 수 있음...
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/search?q=${q}`,

@@ -1,10 +1,10 @@
 import BookItem from "@/components/book-item";
 import style from "./page.module.css";
-import books from "@/mock/books.json"; // ✅ 임시 데이터로서 rendering  중임...
+// import books from "@/mock/books.json"; // ✅ 임시 데이터로서 rendering  중임...
 import { BookData } from "@/types";
-import { delay } from "@/util/delay";
-import { Suspense } from "react";
-import BookItemSkeleton from "@/components/skeleton/book-item-skeleton";
+// import { delay } from "@/util/delay";
+// import { Suspense } from "react";
+// import BookItemSkeleton from "@/components/skeleton/book-item-skeleton";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import { Metadata } from "next";
 
@@ -34,7 +34,7 @@ import { Metadata } from "next";
 
 // ✅비동기 > async
 async function AllBooks() {
-  await delay(1500); //✅ Suspense 적용 > fetching 시간을 일부러 지연시키기
+  // await delay(1500); //✅ Suspense 적용 > fetching 시간을 일부러 지연시키기
 
   // const response = await fetch(`http://localhost:12345/book`); // data-fetching로직을 Component안에 작성할 수 있게 됨
   const response = await fetch(
@@ -60,7 +60,7 @@ async function AllBooks() {
 }
 
 async function RecoBooks() {
-  await delay(3000); //✅ Suspense 적용 > fetching 시간을 일부러 지연시키기
+  // await delay(3000); //✅ Suspense 적용 > fetching 시간을 일부러 지연시키기
   // const response = await fetch(`http://localhost:12345/book/random`);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`, //✅ auto no cache...
@@ -81,7 +81,7 @@ async function RecoBooks() {
   );
 }
 
-export const dynamic = "force-dynamic"; //static -> dynamic 변경
+// export const dynamic = "force-dynamic"; //static -> dynamic 강제 변경 => <Suspense/>도 지우기
 
 //✅ meta data 설정하기 - '약속된 이름의 변수'로서, 해당 변수의 초기값이 곧 metadata의 속성이 됨
 export const metadata: Metadata = {
@@ -101,15 +101,15 @@ export default function Home() {
       <section>
         <h3>지금 추천하는 도서</h3>
         {/* <Suspense fallback={<div>도서를 불러오는 중입니다...</div>}> */}
-        <Suspense fallback={<BookListSkeleton count={3} />}>
+        {/* <Suspense fallback={<BookListSkeleton count={3} />}> */}
           <RecoBooks />
-        </Suspense>
+        {/* </Suspense> */}
       </section>
       <section>
         <h3>등록된 모든 도서</h3>
-        <Suspense fallback={<BookListSkeleton count={10} />}>
+        {/* <Suspense fallback={<BookListSkeleton count={10} />}> */}
           <AllBooks />
-        </Suspense>
+        {/* </Suspense> */}
       </section>
     </div>
   );

@@ -1,13 +1,8 @@
 import { notFound } from "next/navigation";
 import style from "./page.module.css";
-// import { useParams } from "next/navigation";
 import { BookData, ReviewData } from "@/types";
-
 import Image from "next/image"; // ✅ 최적화 > 이미지 최적화
-
-// import { createReviewAction } from "@/actions/create-review.action"; // ✅ ServerAction 파일 불러오기
 import ReviewItem from "@/components/review-item";
-
 import ReviewEditor from "@/components/review-editor";
 import { Metadata } from "next";
 
@@ -15,11 +10,29 @@ import { Metadata } from "next";
 //※ DB 상에는 id:4에 해당하는 페이지가 존재한다고 해도, 상기 함수에 설정되지 않은 값이라면 없는 페이지로 간주됨! 404!
 // export const dynamicParams = false; //반대의 경우, true로 초기화하거나 아니면 기본 값이 true이므로 삭제할 것...
 
-// export function generateStaticParams() {
+// export function generateStaticParams() { //⚠️ [Vercel] 배포 시도 시, 오류 발생!
 //   //⭐ Page설정 > Static Page
 //   // ✅정적 parameter를 생성하는 함수 -> 다음의 정적 parameter에 해당하는 Page들을 build time에 만듦
 //   return [{ id: "1" }, { id: "2" }, { id: "3" }]; //⚠️ URL Parameter의 값은 반드시 "문자열"이어야 함!
 // }
+
+// export async function generateStaticParams() { // (배포 최적화) 모든 페이지를 StaticPage로 설정하기 > 왠지 안 돼서 그냥 주석처리함...
+  
+//   // 특정 페이지만 반환하지 말고, 전체 페이지에 대해 Static 설정하기
+//   // build time에, 현재 등록된 모든 도서의 페이지를 다 정적으로 생성하도록 설정함
+//   const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`);
+//   if(!response.ok){
+//     throw new Error(response.statusText);
+//   }
+
+//   const books:BookData[] = await response.json();
+
+//   // return books.map((book)=>{id:book.id.toString()});
+//   return books.map((book)=> ({id:book.id.toString()}));
+// }
+
+
+
 
 async function BookDetail({ bookId }: { bookId: string }) {
   const response = await fetch(
@@ -86,9 +99,11 @@ async function ReviewList({ bookId }: { bookId: string }) {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  // params: Promise<{ id: string }>;
+  params: { id: string };
 }): Promise<Metadata> {
-  const { id } = await params;
+  // const { id } = await params;
+  const { id } = params;
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${id}`
@@ -121,9 +136,11 @@ export default async function Page({
 
   //⚠️ data-cache 설정을 별도로 하지 않아도, 위에서 URL Parameter를 명시한 페이지는 강제로 StaticPage가 됨
   // params: { id: string };
-  params: Promise<{ id: string }>;
+  // params: Promise<{ id: string }>;
+  params: {id: string};
 }) {
-  const { id } = await params;
+  // const { id } = await params;
+  const { id } = params;
 
   return (
     <div className={style.container}>
